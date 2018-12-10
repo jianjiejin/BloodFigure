@@ -10,12 +10,12 @@ public class result {
         return toTable;
     }
 
-    public Set<String> getFromTables() {
-        return fromTables;
-    }
-
     public void setToTable(String toTable) {
         this.toTable = toTable;
+    }
+
+    public Set<String> getFromTables() {
+        return fromTables;
     }
 
     public void setFromTables(Set<String> fromTables) {
