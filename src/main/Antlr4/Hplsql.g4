@@ -1006,7 +1006,7 @@ expr :
      | expr T_ADD expr  
      | expr T_SUB expr   
      | T_OPEN_P select_stmt T_CLOSE_P 
-     | T_OPEN_P expr T_CLOSE_P 
+     | T_SUB? T_ABS? T_OPEN_P expr T_CLOSE_P
      | expr_interval 
      | expr_concat
      | expr_case
@@ -1014,7 +1014,8 @@ expr :
      | expr_agg_window_func
      | expr_spec_func
      | expr_func                          
-     | expr_atom    
+     | expr_atom
+     | T_SUB expr
      ;
 
 expr_atom : 
@@ -1538,6 +1539,7 @@ non_reserved_words :                      // Tokens that are not reserved words 
      | T_YES
      | T_MONTH
      | T_YEAR
+     | T_ABS
      ;
 
 // Lexer rules
@@ -1857,6 +1859,7 @@ T_XML             : X M L ;
 T_YES             : Y E S ;
 T_MONTH           : M O N T H ;
 T_YEAR            : Y E A R ;
+T_ABS             : A B S;
 
 // Functions with specific syntax
 T_ACTIVITY_COUNT       : A C T I V I T Y '_' C O U N T ;

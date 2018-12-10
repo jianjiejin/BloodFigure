@@ -1,14 +1,15 @@
-import com.google.gson.Gson;
-import domain.TableFigureResult;
+import domain.GraphViz;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 public class TableFigureTest {
+
 
     public static void main(String[] args) throws IOException {
 
@@ -30,14 +31,19 @@ public class TableFigureTest {
         ParseTree tree = parser.program();
         TableFigureVisitor visitor = new TableFigureVisitor();
         visitor.visit(tree);
-        TableFigureResult tfr = visitor.getTFR();
 
-        /*
-            Json输出
-         */
+        GraphViz gv = new GraphViz();
+        gv.addln(gv.start_graph());
+        gv.add(visitor.getSour());
+        gv.addln(gv.end_graph());
+        String type = "pdf";
+        gv.decreaseDpi();
+        gv.decreaseDpi();
+        String fileName="result";
+        File out = new File(fileName+"."+ type);
+        gv.writeGraphToFile( gv.getGraph( gv.getDotSource(), type ), out );
+        System.out.println(visitor.getSour());
 
-//        Gson gson = new Gson();
-//        System.out.println(gson.toJson(tfr).toString());
 
     }
 }
