@@ -10,10 +10,8 @@ import java.io.InputStream;
 
 public class TableFigureTest {
 
-
     public static void main(String[] args) throws IOException {
-
-        String inputFile="/Users/jianjie/Desktop/Demo_Insert/src/test/java/TableFigureTest.txt";
+        String inputFile="src/test/java/TableFigureTest.txt";
         if(args.length>0) inputFile = args[0];
         InputStream is = System.in;
         if(inputFile !=null)is= new FileInputStream(inputFile);
