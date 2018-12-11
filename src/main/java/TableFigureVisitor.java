@@ -1,14 +1,10 @@
-import domain.GraphViz;
-import domain.TableFigureResult;
 
-import java.util.ArrayList;
+import domain.TableFigureResult;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class TableFigureVisitor extends HplsqlBaseVisitor {
 
-    private String fromTables = null;  //来源表
     private String tableName = null;    //结果表名
     private String procName = null;     //存储过程名
     private String mergeTableName=null;     //merge表名
