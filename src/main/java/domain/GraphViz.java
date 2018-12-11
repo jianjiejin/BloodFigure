@@ -13,7 +13,7 @@ public class GraphViz {
     /**
      * Load the config.properties file.
      */
-    private final static String cfgProp = "/Users/jianjie/Desktop/Demo_Insert/src/main/java/config.properties";
+    private final static String cfgProp = "src/main/java/config.properties";
     private final static Properties configFile = new Properties() {
         private final static long serialVersionUID = 1L;
 
@@ -28,7 +28,7 @@ public class GraphViz {
     /**
      * The dir. where temporary files will be created.
      */
-    private static String TEMP_DIR = "/Users/jianjie/Desktop/Demo_Insert/src/test/java/";
+    private static String TEMP_DIR = "src/test/java/";
 
     /**
      * Where is your dot program located? It will be called externally.
