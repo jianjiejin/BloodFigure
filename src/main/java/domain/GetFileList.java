@@ -20,20 +20,13 @@ public class GetFileList {
         }
         // 递归遍历
         for (File f : files) {
-
             if (f.isFile()) {
-
                 fileList.add(f.getPath());
-
             } else if (f.isDirectory()) {
-
                 getFileList(f.getAbsolutePath());
-
             }
         }
-
         return fileList;
-
     }
 
 }

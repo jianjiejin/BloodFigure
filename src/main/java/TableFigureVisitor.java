@@ -16,7 +16,6 @@ public class TableFigureVisitor extends HplsqlBaseVisitor {
     /*
         将值传入 relationsSet 集合
      */
-
     private void insertRelationsSet(String name1,String name2){
         Relation relation = new Relation();
         relation.setFromTable(name1);
@@ -29,16 +28,14 @@ public class TableFigureVisitor extends HplsqlBaseVisitor {
     /*
         处理过程函数,格式定义为excel输出
      */
-
     private void main() {
         for (String str : set) {
-
             if (!set.isEmpty()  && !str.toUpperCase().contains("SESSION.") && !value.contains(str+procName)) {
                 insertRelationsSet(str, procName);
             }
         }
-
-        if(tableName!=null && !tableName.toUpperCase().contains("SESSION.") && !tableName.contains("ETL_ERRLOG_INFO") && !value.contains(procName+tableName)) {
+        if(tableName!=null && !tableName.toUpperCase().contains("SESSION.")
+                && !tableName.contains("ETL_ERRLOG_INFO") && !value.contains(procName+tableName)) {
             insertRelationsSet(procName, tableName);
             set.clear();
         }
@@ -79,7 +76,6 @@ public class TableFigureVisitor extends HplsqlBaseVisitor {
      */
     @Override
     public Object visitInsert_stmt(HplsqlParser.Insert_stmtContext ctx) {
-
         tableName = ctx.table_name().getText();
         set.clear();
         Object result = visitChildren(ctx);
@@ -92,7 +88,6 @@ public class TableFigureVisitor extends HplsqlBaseVisitor {
      */
     @Override
     public Object visitFrom_table_name_clause(HplsqlParser.From_table_name_clauseContext ctx) {
-
         String table_name = ctx.table_name().ident().getText();
         set.add(table_name);
         return visitChildren(ctx);
@@ -101,30 +96,23 @@ public class TableFigureVisitor extends HplsqlBaseVisitor {
     /*
         获取存储过程
      */
-
     @Override
     public Object visitCreate_procedure_stmt(HplsqlParser.Create_procedure_stmtContext ctx) {
-
         procName = ctx.ident().get(0).getText();
         return visitChildren(ctx);
     }
 
     /*
         获取 mergeTableName
-
      */
-
     @Override
     public Object visitMerge_stmt(HplsqlParser.Merge_stmtContext ctx) {
-
         tableName = ctx.merge_table(0).table_name().ident().getText();
         set.clear();
         Object result = visitChildren(ctx);
         main();
         return result;
     }
-
-
 
     public Set<Relation> getRelationSet() {
         return relationsSet;

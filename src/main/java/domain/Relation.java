@@ -5,7 +5,6 @@ public class Relation {
     private String fromTable;
     private String toTable;
 
-
     public String getFromTable() {
         return fromTable;
     }
