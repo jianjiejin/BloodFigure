@@ -1,12 +1,11 @@
 import domain.*;
+
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-
 import java.io.*;
 import java.util.ArrayList;
-
 import java.util.List;
 import java.util.Set;
 
@@ -15,9 +14,12 @@ public class TableFigureTest {
     public static void main(String[] args) throws IOException {
 
         String fileDir =  "/Users/jianjie/Desktop/dw/";
+
         List<String> fileList = GetFileList.getFileList(fileDir);
-        ExportExcelUtil<Relation> util = new ExportExcelUtil<Relation>();
         List<Relation> list = new ArrayList<>();
+
+        ExportExcelUtil<Relation> util = new ExportExcelUtil<Relation>();
+
 
         /*
             输出到excel
@@ -40,7 +42,7 @@ public class TableFigureTest {
             HplsqlParser parser = new HplsqlParser(tokenStream);
 
             ParseTree tree = parser.program();
-            TableFigureVisitor visitor = new TableFigureVisitor();          //自定义visitor遍历
+            TableFigureVisitor visitor = new TableFigureVisitor();          // 自定义visitor遍历
             visitor.visit(tree);
 
             Set<Relation> relationSet = visitor.getRelationSet();
@@ -52,7 +54,7 @@ public class TableFigureTest {
         }
 
         String[] columnNames = { "From", "To"};
-        util.exportExcel("用户导出", columnNames, list, new FileOutputStream("/Users/jianjie/Desktop/test/test.xls"), ExportExcelUtil.EXCEL_FILE_2003);
+        util.exportExcel("存储依赖", columnNames, list, new FileOutputStream("/Users/jianjie/Desktop/test/test.xls"), ExportExcelUtil.EXCEL_FILE_2003);
 
 
 

@@ -1,9 +1,9 @@
-
 import domain.Relation;
 
 import java.util.HashSet;
-
 import java.util.Set;
+
+
 
 public class TableFigureVisitor extends HplsqlBaseVisitor {
 
@@ -11,39 +11,37 @@ public class TableFigureVisitor extends HplsqlBaseVisitor {
     private String procName = null;
     private Set<Relation> relationsSet = new HashSet<Relation>();
     private Set<String> set = new HashSet<>();
-    private Set<String> value = new HashSet<>(); //用于去重
+    private Set<String> value = new HashSet<>();    // 用于去重
 
+    /*
+        将值传入 relationsSet 集合
+     */
 
+    private void insertRelationsSet(String name1,String name2){
+        Relation relation = new Relation();
+        relation.setFromTable(name1);
+        relation.setToTable(name2);
+        relationsSet.add(relation);
+        value.add(name1+name2);
+    }
 
 
     /*
         处理过程函数,格式定义为excel输出
      */
 
-    private void main(){
-
+    private void main() {
         for (String str : set) {
 
             if (!set.isEmpty()  && !str.toUpperCase().contains("SESSION.") && !value.contains(str+procName)) {
-                Relation relation = new Relation();
-                relation.setFromTable(str);
-                relation.setToTable(procName);
-                relationsSet.add(relation);
-                value.add(str+procName);
+                insertRelationsSet(str, procName);
             }
-
         }
 
         if(tableName!=null && !tableName.toUpperCase().contains("SESSION.") && !tableName.contains("ETL_ERRLOG_INFO") && !value.contains(procName+tableName)) {
-            Relation relation = new Relation();
-            relation.setToTable(tableName);
-            relation.setFromTable(procName);
-            relationsSet.add(relation);
-            value.add(procName+tableName);
-
+            insertRelationsSet(procName, tableName);
             set.clear();
         }
-
     }
 
 //    /*
@@ -85,10 +83,7 @@ public class TableFigureVisitor extends HplsqlBaseVisitor {
         tableName = ctx.table_name().getText();
         set.clear();
         Object result = visitChildren(ctx);
-
-            main();
-
-
+        main();
         return result;
     }
 
@@ -120,20 +115,14 @@ public class TableFigureVisitor extends HplsqlBaseVisitor {
      */
 
     @Override
-
     public Object visitMerge_stmt(HplsqlParser.Merge_stmtContext ctx) {
 
         tableName = ctx.merge_table(0).table_name().ident().getText();
         set.clear();
         Object result = visitChildren(ctx);
-
-            main();
-
+        main();
         return result;
-
     }
-
-
 
 
 
