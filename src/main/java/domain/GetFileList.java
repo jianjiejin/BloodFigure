@@ -7,7 +7,7 @@ import java.util.List;
 /*
     遍历文件目录
  */
-public class getFiles {
+public class GetFileList {
 
     public static  List<String> getFileList(String fileDir) {
 

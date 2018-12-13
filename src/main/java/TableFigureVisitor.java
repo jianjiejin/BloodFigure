@@ -1,46 +1,79 @@
+
+import domain.Relation;
+
 import java.util.HashSet;
+
 import java.util.Set;
 
 public class TableFigureVisitor extends HplsqlBaseVisitor {
 
     private String tableName = null;
     private String procName = null;
+    private Set<Relation> relationsSet = new HashSet<Relation>();
+    private Set<String> set = new HashSet<>();
+    private Set<String> value = new HashSet<>(); //用于去重
 
-    private Set<String> set = new HashSet<String>();
-    private Set<String> sourLineSet = new HashSet<>();
 
 
-    StringBuilder source = new StringBuilder();
-    StringBuilder sb = new StringBuilder();
 
     /*
-        处理过程函数
+        处理过程函数,格式定义为excel输出
      */
 
     private void main(){
+
         for (String str : set) {
-            sb.append("\"" + str + "\"");
-            if (!set.isEmpty()  && !str.toUpperCase().contains("SESSION.")) {
-                sb.append(" -> " + "\"" + "存储过程：" + procName + "\"" + "\n");
-                if (!sourLineSet.contains(sb.toString())) {
-                    source.append(sb.toString());
-                    sourLineSet.add(sb.toString());
-                }
+
+            if (!set.isEmpty()  && !str.toUpperCase().contains("SESSION.") && !value.contains(str+procName)) {
+                Relation relation = new Relation();
+                relation.setFromTable(str);
+                relation.setToTable(procName);
+                relationsSet.add(relation);
+                value.add(str+procName);
             }
-            sb.delete(0, sb.length());
+
         }
 
-        if(tableName!=null && !tableName.toUpperCase().contains("SESSION.") && !tableName.contains("ETL_ERRLOG_INFO")) {
-            sb.append("\"" + "存储过程：" + procName + "\"" + " -> " + "\"" + tableName + "\"" + "[color=red penwidth=2.0]" + "\n");
-            if (!sourLineSet.contains(sb.toString())) {
-                source.append(sb);
-                sourLineSet.add(sb.toString());
-            }
-            sb.delete(0, sb.length());
+        if(tableName!=null && !tableName.toUpperCase().contains("SESSION.") && !tableName.contains("ETL_ERRLOG_INFO") && !value.contains(procName+tableName)) {
+            Relation relation = new Relation();
+            relation.setToTable(tableName);
+            relation.setFromTable(procName);
+            relationsSet.add(relation);
+            value.add(procName+tableName);
+
             set.clear();
         }
 
     }
+
+//    /*
+//        处理过程函数,格式定义为dot语言
+//     */
+//
+//    private void main(){
+//        for (String str : set) {
+//            sb.append("\"" + str + "\"");
+//            if (!set.isEmpty()  && !str.toUpperCase().contains("SESSION.")) {
+//                sb.append(" -> " + "\"" + "存储过程：" + procName + "\"" + "\n");
+//                if (!sourLineSet.contains(sb.toString())) {
+//                    source.append(sb.toString());
+//                    sourLineSet.add(sb.toString());
+//                }
+//            }
+//            sb.delete(0, sb.length());
+//        }
+//
+//        if(tableName!=null && !tableName.toUpperCase().contains("SESSION.") && !tableName.contains("ETL_ERRLOG_INFO")) {
+//            sb.append("\"" + "存储过程：" + procName + "\"" + " -> " + "\"" + tableName + "\"" + "[color=red penwidth=2.0]" + "\n");
+//            if (!sourLineSet.contains(sb.toString())) {
+//                source.append(sb);
+//                sourLineSet.add(sb.toString());
+//            }
+//            sb.delete(0, sb.length());
+//            set.clear();
+//        }
+//
+//    }
 
 
     /*
@@ -52,7 +85,9 @@ public class TableFigureVisitor extends HplsqlBaseVisitor {
         tableName = ctx.table_name().getText();
         set.clear();
         Object result = visitChildren(ctx);
-        main();
+
+            main();
+
 
         return result;
     }
@@ -91,7 +126,9 @@ public class TableFigureVisitor extends HplsqlBaseVisitor {
         tableName = ctx.merge_table(0).table_name().ident().getText();
         set.clear();
         Object result = visitChildren(ctx);
-        main();
+
+            main();
+
         return result;
 
     }
@@ -100,8 +137,8 @@ public class TableFigureVisitor extends HplsqlBaseVisitor {
 
 
 
-    public String getSour() {
-        return source.toString();
+    public Set<Relation> getRelationSet() {
+        return relationsSet;
     }
 
 }

@@ -1,26 +1,27 @@
-import domain.GraphViz;
-import domain.getFiles;
+import domain.*;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+
+import java.io.*;
+import java.util.ArrayList;
+
 import java.util.List;
+import java.util.Set;
 
 public class TableFigureTest {
 
     public static void main(String[] args) throws IOException {
 
-        String fileDir =  "/Users/jianjie/Desktop/test/";
-        List<String> fileList = getFiles.getFileList(fileDir);
+        String fileDir =  "/Users/jianjie/Desktop/dw/";
+        List<String> fileList = GetFileList.getFileList(fileDir);
+        ExportExcelUtil<Relation> util = new ExportExcelUtil<Relation>();
+        List<Relation> list = new ArrayList<>();
 
-        GraphViz gv = new GraphViz();
-        gv.addln(gv.start_graph());
-
-
+        /*
+            输出到excel
+         */
         for (int i = 0; i < fileList.size(); i++) {
 
             String inputFile=fileList.get(i);
@@ -41,19 +42,63 @@ public class TableFigureTest {
             ParseTree tree = parser.program();
             TableFigureVisitor visitor = new TableFigureVisitor();          //自定义visitor遍历
             visitor.visit(tree);
-            gv.add(visitor.getSour());
-            System.out.println(visitor.getSour());
+
+            Set<Relation> relationSet = visitor.getRelationSet();
+
+            for (Relation relation : relationSet
+                 ) {
+                list.add(relation);
+            }
         }
 
-        gv.addln(gv.end_graph());
-        String type = "pdf";
-        gv.decreaseDpi();
-        gv.decreaseDpi();
-        String fileName="result";
-        File out = new File(fileName+"."+ type);
-        gv.writeGraphToFile( gv.getGraph( gv.getDotSource(), type ), out );
+        String[] columnNames = { "From", "To"};
+        util.exportExcel("用户导出", columnNames, list, new FileOutputStream("/Users/jianjie/Desktop/test/test.xls"), ExportExcelUtil.EXCEL_FILE_2003);
 
+
+
+
+
+
+//        /*
+//            dot输出
+//         */
+//        GraphViz gv = new GraphViz();
+//        gv.addln(gv.start_graph());
+//
+//
+//        for (int i = 0; i < fileList.size(); i++) {
+//
+//            String inputFile=fileList.get(i);
+//            if(args.length>0) {
+//                inputFile = args[0];
+//            }
+//
+//            InputStream is = System.in;
+//            if(inputFile !=null) {
+//                is= new FileInputStream(inputFile);
+//            }
+//
+//            ANTLRInputStream input = new ANTLRInputStream(is);
+//            HplsqlLexer lexer = new HplsqlLexer( input);
+//            CommonTokenStream tokenStream = new CommonTokenStream(lexer);
+//            HplsqlParser parser = new HplsqlParser(tokenStream);
+//
+//            ParseTree tree = parser.program();
+//            TableFigureVisitor visitor = new TableFigureVisitor();          //自定义visitor遍历
+//            visitor.visit(tree);
+//            gv.add(visitor.getSour());
+//            System.out.println(visitor.getSour());
+//        }
+//
+//        gv.addln(gv.end_graph());
+//        String type = "pdf";
+//        gv.decreaseDpi();
+//        gv.decreaseDpi();
+//        String fileName="result";
+//        File out = new File(fileName+"."+ type);
+//        gv.writeGraphToFile( gv.getGraph( gv.getDotSource(), type ), out );
 
 
     }
 }
+
