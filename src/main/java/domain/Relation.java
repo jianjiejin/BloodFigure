@@ -1,5 +1,8 @@
 package domain;
 
+/**
+ * 目标表，影响表的关系类
+ */
 public class Relation {
 
     private String fromTable;

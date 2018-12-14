@@ -65,6 +65,13 @@ public class HplsqlBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
+	@Override public T visitCreate_view_stmt(HplsqlParser.Create_view_stmtContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
 	@Override public T visitSemicolon_stmt(HplsqlParser.Semicolon_stmtContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}

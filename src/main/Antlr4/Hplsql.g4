@@ -62,6 +62,7 @@ stmt :
      | create_package_body_stmt
      | create_procedure_stmt
      | create_table_stmt
+     | create_view_stmt             // add  create_view_stmt
      | declare_stmt
      | delete_stmt
      | describe_stmt
@@ -103,7 +104,14 @@ stmt :
      | expr_stmt     
      | semicolon_stmt      // Placed here to allow null statements ;;...          
      ;
-     
+
+create_view_stmt:
+      (T_CREATE T_OR T_REPLACE) T_VIEW ident T_AS select_stmt from_clause where_clause?  group_by_clause?
+     ;
+
+
+
+
 semicolon_stmt :
        T_SEMICOLON
      | '@' | '#' | '/' 
@@ -1540,6 +1548,7 @@ non_reserved_words :                      // Tokens that are not reserved words 
      | T_MONTH
      | T_YEAR
      | T_ABS
+     | T_VIEW       //add
      ;
 
 // Lexer rules
@@ -1860,6 +1869,7 @@ T_YES             : Y E S ;
 T_MONTH           : M O N T H ;
 T_YEAR            : Y E A R ;
 T_ABS             : A B S;
+T_VIEW            : V I E W ;
 
 // Functions with specific syntax
 T_ACTIVITY_COUNT       : A C T I V I T Y '_' C O U N T ;

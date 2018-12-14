@@ -3,7 +3,9 @@ package domain;
 import java.io.*;
 import java.util.Properties;
 
-
+/**
+ * dot画图的工具类
+ */
 public class GraphViz {
     /**
      * Detects the client's operating system.

@@ -12,16 +12,12 @@ import java.util.Set;
 public class TableFigureTest {
 
     public static void main(String[] args) throws IOException {
-
+        //指定目录
         String fileDir =  "/Users/jianjie/Desktop/test类/";
 
         List<String> fileList = GetFileList.getFileList(fileDir);
         List<Relation> list = new ArrayList<>();
         ExportExcelUtil<Relation> util = new ExportExcelUtil<Relation>();
-
-        /*
-            输出到excel
-         */
 
         for (int i = 0; i < fileList.size(); i++) {
             String inputFile=fileList.get(i);
@@ -37,8 +33,9 @@ public class TableFigureTest {
             CommonTokenStream tokenStream = new CommonTokenStream(lexer);
             HplsqlParser parser = new HplsqlParser(tokenStream);
             ParseTree tree = parser.program();
-            TableFigureVisitor visitor = new TableFigureVisitor();          // 自定义visitor遍历
+            TableFigureVisitor visitor = new TableFigureVisitor();      // 自定义visitor遍历
             visitor.visit(tree);
+
             Set<Relation> relationSet = visitor.getRelationSet();
             for (Relation relation : relationSet
                  ) {
@@ -47,7 +44,7 @@ public class TableFigureTest {
         }
 
         String[] columnNames = { "From", "To"};
-        util.exportExcel("存储依赖", columnNames, list, new FileOutputStream("/Users/jianjie/Desktop/test/test1.xls"), ExportExcelUtil.EXCEl_FILE_2007);
+        util.exportExcel("存储依赖", columnNames, list, new FileOutputStream("/Users/jianjie/Desktop/test/test3.xls"), ExportExcelUtil.EXCEl_FILE_2007);
 
 
 

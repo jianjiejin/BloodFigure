@@ -4,8 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-/*
-    遍历文件目录
+/**
+ * 遍历指定目录，获取所有 *.sql 文件的路径
  */
 public class GetFileList {
 

@@ -31,7 +31,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 
 /**
- * 导出Excel
+ * 用于Excel 导出结果的工具类
+ * @param <T>
  */
 public class ExportExcelUtil<T>{
 
